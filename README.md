@@ -4,7 +4,7 @@ This script is made to clear your CoreGui of injected scripts AND your executor.
 Guaranteed to work on these executors below:
 1. Codex
 2. Trigon [ Android ]
-3. Delta [ Untested ]
+3. Delta
 4. Fluxus Z [ Untested ]
 5. Arceus X
 6. Vega X
