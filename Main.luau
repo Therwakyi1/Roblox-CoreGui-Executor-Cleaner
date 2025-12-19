@@ -1,8 +1,9 @@
 -- V2 IS FINALLY FUCKING OUT, LET'S FUCKING GOOOOOOOOO!!!!!!1
 
-local CoreGui = game:GetService("CoreGui")
+    local CoreGui = game:GetService("CoreGui")
+local StarterGui = game:GetService("StarterGui")
 
--- === WHITELIST DOWN BELOW (dont touch this shit nigga) ===
+-- === WHITELIST DOWN BELOW (dont touch this shit) ===
 local whitelistedContainers = {
     ["RobloxGui"] = true,
     ["PlayerList"] = true,
@@ -63,36 +64,35 @@ end
 
 -- === 1. HEURISTICS FOR IDENTIFYING "JUMBLED" NAMES (and other random bullshit) ===
 local function isJumbled(name)
-    -- 1. check for non-standard characters cuz legit stuff dont use weird shit
+    -- 1. Check for non-standard characters cuz legit stuff dont use weird shit
     if string.match(name, "[^%w%s%-%.]") then
         return true
     end
 
-    -- 2. check for excessive length cuz no one names shit that long
+    -- 2. Check for excessive length cuz no one names shit that long
     if #name > 30 then
         return true
     end
 
-    -- 3. advanced entropy check for random shitstains like "JhQwuIaD"
+    -- 3. Advanced entropy check for random garbage like "JhQwuIaD"
     local upperCount = #string.gsub(name, "[^A-Z]", "")
     local lowerCount = #string.gsub(name, "[^a-z]", "")
     local totalLetters = upperCount + lowerCount
     
     if totalLetters > 5 then
-        -- ROBLOX uses PascalCase. If it has 3+ caps in a row, its probably a random string. (also fuck u roblox)
+        -- Roblox uses PascalCase. If it has 3+ caps in a row, its probably a random string.
         if string.match(name, "%u%u%u") then
             return true
         end
 
-        -- check vowel ratio. Random strings are usually full of consonants and look like ass.
+        -- Check vowel ratio. Random strings are usually full of consonants and look like ass.
         local _, vowelCount = string.gsub(name:lower(), "[aeiouy]", "")
         if vowelCount == 0 or (vowelCount / totalLetters) < 0.15 then
             return true
         end
         
-        -- catching weird mixed casing like "jHqW"
+        -- Catching weird mixed casing like "jHqW"
         if upperCount > 1 and lowerCount > 1 and string.match(name, "%l%u%l") then
-            -- if it looks like absolute keyboard mash, obliterate it
             return true
         end
     end
@@ -125,7 +125,6 @@ local function scanCoreGuiAndDestroy()
             ))
 
             -- !!! DESTROY THE SUSPICIOUS OBJECT TWIN !!!
-            -- use a pcall cuz sometimes roblox locks these objects and it breaks the script
             local success, _ = pcall(function()
                 object:Destroy()
             end)
@@ -136,6 +135,13 @@ local function scanCoreGuiAndDestroy()
         end
     end
 
+    -- show the notification
+    StarterGui:SetCore("SendNotification", {
+        Title = "Clearing done!",
+        Text = "The CoreGui has been cleansed of injected GUIs. Enjoyed the experience? Check out our Github page!",
+        Duration = 7.5
+    })
+
     if destroyedCount > 0 then
         print(string.format("--- Scan Complete: Successfully DESTROYED %d potentially malicious objects. ---", destroyedCount))
     else
@@ -143,15 +149,8 @@ local function scanCoreGuiAndDestroy()
     end
 end
 
--- run the damn thing once
+-- run the damn thingy once
 scanCoreGuiAndDestroy()
-
-
-
-
-
-
-
 
 
 
